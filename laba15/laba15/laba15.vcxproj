@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="circle.cpp" />
-    <ClCompile Include="conveyor.cpp" />
     <ClCompile Include="laba15.cpp" />
     <ClCompile Include="fibRandom.cpp" />
     <ClCompile Include="monte-carlo.cpp" />

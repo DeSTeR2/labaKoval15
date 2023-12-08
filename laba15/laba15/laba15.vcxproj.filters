@@ -30,9 +30,6 @@
     <ClCompile Include="rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="conveyor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="paralelepiped.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

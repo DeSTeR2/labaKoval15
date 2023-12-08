@@ -3,7 +3,14 @@
 #include <string>
 #include <algorithm>
 #include <iomanip>
+#include <stdio.h>
 using namespace std;
+
+#pragma warning(disable : 4996)
+
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_DEPRECATE
+#define _CRT_NONSTDC_NO_DEPRECATE
 
 #include "monte-carlo.hpp";
 #include "rectangle.hpp";
@@ -82,7 +89,7 @@ void setSystem(int E, int E1) {
 }
 void genGold() {
 
-	setFibRandomM(abs(rand()) % 5 + 10);
+	setFibRandomM(20);
 
 	int a = fibRandom();
 	int b = fibRandom();
@@ -108,19 +115,19 @@ void recuperator(int t0, int t1) {
 	E0 += heat;
 }
 
-void Cout_underline(int n) {
-	for (int i = 0; i < n; i++) {
-		cout << "_";
-	}
-	cout << "\n";
-}
+//void Cout_underline(int n) {
+//	for (int i = 0; i < n; i++) {
+//		cout << "_";
+//	}
+//	cout << "\n";
+//}
 
 int spaces(int n) {
 	return to_string(n).size();
 }
 
 void Cout_currentState() {
-	Cout_underline(30);
+	//Cout_underline(30);
 	string current = "Current", need = "Need", energy = "Energy", mass = "Mass", volume = "Volume";
 
 	int szs[] = { current.size(), spaces(curV) , spaces(curM), spaces(M_max), spaces(V_max), spaces(E0), spaces(Ef) };
@@ -131,55 +138,45 @@ void Cout_currentState() {
 	//cout << sp;
 	//return;
 	
+	//cout << "<div class='tableStyle'>";
 
-	for (int i = 0; i < volume.size() + 1; i++) cout << " ";
-	cout << "| Current ";
-	for (int i = 0; i < sp - ( current.size()) + 1; i++) cout << " ";
-	cout << "| Need ";
-	for (int i = 0; i < sp - (2 + need.size()) + 1; i++) cout << " ";
-	for (int i = 0; i < volume.size() + 1; i++) cout << " ";
-	cout << "\n";
-	cout << mass << "   | " << curM;
-	for (int i = 0; i < sp - spaces(curM) + 2; i++) cout << " ";
-	cout << "| " << M_max << "\n";
-
-	cout << volume << " | " << curV;
-	for (int i = 0; i < sp - spaces(curV) + 2; i++) cout << " ";
-	cout << "| " << V_max << "\n";
+	cout << "<tr class='tableStyle'><td>&nbsp;</td> <td>Current</td> <td>Need</td></tr>";
+	cout<< "<tr class='tableStyle'> <td>Mass</td> <td> " << curM << "</td> <td> " << M_max << "</td> </tr>";
+	cout << "<tr class='tableStyle'> <td>Volume</td> <td> " << curV << "</td> <td> " << V_max << "</td> </tr>";
 	
+
 	cout.setf(ios::fixed);
-	cout << energy << " | " << setprecision(0) << E0;
-	for (int i = 0; i < sp - spaces(E0) + 2; i++) cout << " ";
-	cout << "| " << setprecision(0) << Ef << "\n";
+	cout << "<tr class='tableStyle'> <td>Energy</td> <td> " << setprecision(0 )<< E0 << "</td> <td> " << setprecision(0)<<Ef << "</td> </tr>";
+	//cout << "</div>";
 }
 
 // генеруЇ паралелеп≥пед золота? 
 void Put() {
 	E0 -= Ep;
 	genGold();
-	Cout_underline(30);
-	cout << "Put()\nA = " << getA() << ", B = " << getB() << ", C = " << getC() << "\nRo = " << getRo() << "\n";
+	//Cout_underline(30);
+	cout << "<tr><th>Put()</th>" << "<td>A = " << getA() << "</td> <td> B = " << getB() << "</td><td> C = " << getC() << "</td><td>Ro = " << getRo() << "</td>";
 }
 
 // викинути, бо не п≥дходить
 void Drop() {
 	E0 -= Ed;
-	Cout_underline(30);
-	cout << "Drop()\n";
+	//Cout_underline(30);
+	cout << "<tr><th>Drop()</tr></th>";
 }
 
 // переплавити, воно повинно прол≥зти в плавильний в≥дс≥к розм≥ром HxM
 void Accept();
 
+
 // коли дос€гаЇтьс€ межа (по мас≥ та об'Їму) наповненн€ бульби можна в≥др≥зати €кийсь кусочок в≥д
 // останього куска золота та Fly() додому
-
 void Cut();
 
 void Fly() {
 	if (E0 > Ef) {
-		Cout_underline(30);
-		cout << "Fly()\n";
+		//Cout_underline(30);
+		cout << "<tr><th class='fly'>Fly()</th></tr>";
 		fly = true;
 	}
 }
@@ -189,7 +186,12 @@ int main() {
 	setSystem(500,1000);
 	setSides(H, W);
 	setFibRandomM(20);
+	
+	freopen("Protocol.html", "w", stdout);
 
+	cout<< "<!DOCTYPE html><html><head><link rel='stylesheet' href = 'style.css'></head><body>";
+
+	cout << "<table>\n";
 	//cout << E0 << " " << Ef;
 	
 	while (fly == false) {
@@ -200,6 +202,8 @@ int main() {
 		if (fly == true) break;
 		//Fly();
 	}
+
+	cout << "</table></body>\n";
 	
 }
 
@@ -214,8 +218,8 @@ void Accept() {
 	E0 -= Ea;
 	recuperator(9, Tp);
 	recuperator(Tp, T1);
-	Cout_underline(30);
-	cout << "Accept()\n";
+	//Cout_underline(30);
+	cout << "<tr><th>Accept()</th></tr>";
 	Cut();
 }
 
@@ -235,10 +239,10 @@ void Cut() {
 		int cntM = M_max - curM;
 		int Min = min(cntM / getRo(), cntV);
 
-		Cout_underline(30);
+		//Cout_underline(30);
 		int newA = Min / (B * C);
 		if (newA >= 1) {
-			cout << "Cut " <<  newA << " - -\n";
+			cout << "<tr><th>Cut " <<  newA << " - -</th></tr>";
 			setA(newA);
 			curM += calcMass();
 			curV += calcV();
@@ -248,7 +252,7 @@ void Cut() {
 
 		int newB = Min / (A * C);
 		if (newB >= 1) {
-			cout << "Cut - " << newB << " -\n";
+			cout << "<tr><th>Cut - " << newB << " -</th></tr>";
 			setB(newB);
 			curM += calcMass();
 			curV += calcV();
@@ -258,7 +262,7 @@ void Cut() {
 
 		int newC = Min / (B * C);
 		if (newC >= 1) {
-			cout << "Cut - - " << newC << "\n";
+			cout << "<tr><th>Cut - - " << newC << "</th></tr>";
 			setC(newC);
 			curM += calcMass();
 			curV += calcV();

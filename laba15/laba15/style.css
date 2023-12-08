@@ -1,0 +1,16 @@
+th,td{
+  border: 1px solid grey;
+  text-align:center;
+} 
+
+th,td{
+   padding:10px;
+}
+
+.tableStyle td{
+  border: 2px solid black;
+}
+
+.fly {
+  border: 5px solid black;
+}
